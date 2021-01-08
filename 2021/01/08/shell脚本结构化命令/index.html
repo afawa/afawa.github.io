@@ -1,0 +1,176 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"><meta><title>shell脚本结构化命令 - Yiming&#039;s Blog</title><link rel="manifest" href="/manifest.json"><meta name="application-name" content="Yiming&#039;s Blog"><meta name="msapplication-TileImage" content="/img/favicon.svg"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Yiming&#039;s Blog"><meta name="apple-mobile-web-app-status-bar-style" content="default"><meta name="description" content="结构化命令if-then 语句1234if commandthen    commandsfi"><meta property="og:type" content="blog"><meta property="og:title" content="shell脚本结构化命令"><meta property="og:url" content="http://example.com/2021/01/08/shell%E8%84%9A%E6%9C%AC%E7%BB%93%E6%9E%84%E5%8C%96%E5%91%BD%E4%BB%A4/"><meta property="og:site_name" content="Yiming&#039;s Blog"><meta property="og:description" content="结构化命令if-then 语句1234if commandthen    commandsfi"><meta property="og:locale" content="en_US"><meta property="og:image" content="http://example.com/img/og_image.png"><meta property="article:published_time" content="2021-01-08T10:21:18.000Z"><meta property="article:modified_time" content="2021-01-08T14:42:37.592Z"><meta property="article:author" content="Yiming He"><meta property="article:tag" content="shell programming"><meta property="twitter:card" content="summary"><meta property="twitter:image" content="/img/og_image.png"><script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"http://example.com/2021/01/08/shell%E8%84%9A%E6%9C%AC%E7%BB%93%E6%9E%84%E5%8C%96%E5%91%BD%E4%BB%A4/"},"headline":"Yiming's Blog","image":["http://example.com/img/og_image.png"],"datePublished":"2021-01-08T10:21:18.000Z","dateModified":"2021-01-08T14:42:37.592Z","author":{"@type":"Person","name":"Yiming He"},"description":"结构化命令if-then 语句1234if commandthen    commandsfi"}</script><link rel="canonical" href="http://example.com/2021/01/08/shell%E8%84%9A%E6%9C%AC%E7%BB%93%E6%9E%84%E5%8C%96%E5%91%BD%E4%BB%A4/"><link rel="icon" href="/img/favicon.svg"><link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.12.0/css/all.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@9.12.0/styles/atom-one-dark.css"><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@400;600&amp;family=Source+Code+Pro"><link rel="stylesheet" href="/css/default.css"><style>body>.footer,body>.navbar,body>.section{opacity:0}</style><!--!--><!--!--><!--!--><!--!--><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/cookieconsent@3.1.1/build/cookieconsent.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lightgallery@1.6.8/dist/css/lightgallery.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/justifiedGallery@3.7.0/dist/css/justifiedGallery.min.css"><!--!--><!--!--><script src="https://cdn.jsdelivr.net/npm/pace-js@1.0.2/pace.min.js"></script><!--!--><!--!--><meta name="generator" content="Hexo 5.3.0"></head><body class="is-2-column"><nav class="navbar navbar-main"><div class="container"><div class="navbar-brand justify-content-center"><a class="navbar-item navbar-logo" href="/"><img src="/img/logo.svg" alt="Yiming&#039;s Blog" height="28"></a></div><div class="navbar-menu"><div class="navbar-start"><a class="navbar-item" href="/">Home</a><a class="navbar-item" href="/archives">Archives</a><a class="navbar-item" href="/categories">Categories</a><a class="navbar-item" href="/tags">Tags</a><a class="navbar-item" href="/about">About</a></div><div class="navbar-end"><a class="navbar-item" target="_blank" rel="noopener" title="Download on GitHub" href="https://github.com/ppoffice/hexo-theme-icarus"><i class="fab fa-github"></i></a><a class="navbar-item is-hidden-tablet catalogue" title="Catalogue" href="javascript:;"><i class="fas fa-list-ul"></i></a><a class="navbar-item search" title="Search" href="javascript:;"><i class="fas fa-search"></i></a></div></div></div></nav><section class="section"><div class="container"><div class="columns"><div class="column order-2 column-main is-8-tablet is-8-desktop is-8-widescreen"><div class="card"><article class="card-content article" role="article"><div class="article-meta is-size-7 is-uppercase level is-mobile"><div class="level-left"><span class="level-item">Posted&nbsp;<time dateTime="2021-01-08T10:21:18.000Z" title="2021-01-08T10:21:18.000Z">2021-01-08</time></span><span class="level-item">Updated&nbsp;<time dateTime="2021-01-08T14:42:37.592Z" title="2021-01-08T14:42:37.592Z">2021-01-08</time></span><span class="level-item"><a class="link-muted" href="/categories/programming-language/">programming language</a></span><span class="level-item">12 minutes read (About 1743 words)</span></div></div><h1 class="title is-3 is-size-4-mobile">shell脚本结构化命令</h1><div class="content"><h2 id="结构化命令"><a href="#结构化命令" class="headerlink" title="结构化命令"></a>结构化命令</h2><h3 id="if-then-语句"><a href="#if-then-语句" class="headerlink" title="if-then 语句"></a><code>if-then</code> 语句</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">if command</span><br><span class="line">then</span><br><span class="line">    commands</span><br><span class="line">fi</span><br></pre></td></tr></table></figure>
+<a id="more"></a>
+
+<ol>
+<li><p>如果<code>if</code>后的命令的推出码是0，则会运行<code>then</code>部分。</p>
+</li>
+<li><p>运行<code>if</code>语句中的错误信息依然会显示，可以用某些方法避免</p>
+</li>
+<li><p>另一种形式</p>
+ <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">if command; then</span><br><span class="line">    commands</span><br><span class="line">fi</span><br></pre></td></tr></table></figure>
+<h3 id="if-then-else-语句"><a href="#if-then-else-语句" class="headerlink" title="if-then-else 语句"></a><code>if-then-else</code> 语句</h3></li>
+</ol>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">if command</span><br><span class="line">then</span><br><span class="line">    commands</span><br><span class="line">else</span><br><span class="line">    commands</span><br><span class="line">fi</span><br></pre></td></tr></table></figure>
+<ol>
+<li><code>if</code>中的语句的退出码不为0时，运行<code>else</code>中的语句</li>
+</ol>
+<h3 id="嵌套if"><a href="#嵌套if" class="headerlink" title="嵌套if"></a>嵌套if</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">if command1</span><br><span class="line">then</span><br><span class="line">    commands</span><br><span class="line">elif command2</span><br><span class="line">    commands</span><br><span class="line">fi</span><br></pre></td></tr></table></figure>
+<h3 id="test-命令"><a href="#test-命令" class="headerlink" title="test 命令"></a><code>test</code> 命令</h3><p>如果<code>test</code>命令中列出的条件成立，<code>test</code>命令就会退出并返回退出码0。如果condition部分本身为空，那么<code>test</code>以非零返回。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> <span class="built_in">test</span> 命令</span></span><br><span class="line">test condition</span><br><span class="line"><span class="meta">#</span><span class="bash"> <span class="built_in">test</span> 命令结合if-else</span></span><br><span class="line">if test condition</span><br><span class="line">then</span><br><span class="line">    commands</span><br><span class="line">fi</span><br></pre></td></tr></table></figure>
+<p>bash 提供了另一种测试方式，不需要声明<code>test</code>命令。方括号定义了测试条件，第一个方括号后和第二个方括号前必须加上一个空格。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">if [ condition ]</span><br><span class="line">then</span><br><span class="line">    commands</span><br><span class="line">fi</span><br></pre></td></tr></table></figure>
+<ol>
+<li><code>test</code>可以测试一个变量是否为空，不为空则返回0</li>
+<li>数值比较<ol>
+<li><code>n1 arg n2</code>，其中<code>n1</code>，<code>n2</code>是数值，<code>arg</code>是选项，<code>arg</code>包括 <code>-eq</code>, <code>-ge</code>, <code>-gt</code>, <code>-le</code>, <code>-lt</code>, <code>-ne</code> （相等，大于等于，大于，小于等于，小于，不等于）。</li>
+<li>bash shell只能处理整数，<code>test</code>命令不能处理浮点数。</li>
+</ol>
+</li>
+<li>字符串比较<ol>
+<li>字符串相等性。<code>str1 = str2</code> 判断两个字符串是否相等，<code>str1 != str2</code> 判断两个字符串是否不相等</li>
+<li>字符串顺序。<code>str1 \&gt; str2</code> , <code>str1 \&lt; str2</code>。大于号小于号必须使用转义，不然会被理解成重定向符号。在test中，根据ASCII标准进行排序，<code>sort</code>和<code>test</code>对于大写小写的判断是反的。</li>
+<li>字符串大小。<code>-n str1</code> 检查str1的长度是否为0 ，<code>-z str1</code> 检查str1的长度是否不为0。</li>
+</ol>
+</li>
+<li>文件比较<ol>
+<li>检查目录。<code>-d file</code>，检查file是否存在并是一个目录。</li>
+<li>检查对象是否存在。<code>-e file</code>，检查file是否存在。</li>
+<li>检查文件。<code>-f file</code>，检查file是否存在并是一个文件。</li>
+<li>检查是否可读。<code>-r file</code>，检查file是否存在并可读。</li>
+<li>检查空文件。<code>-s file</code>，检查file是否存在并非空。</li>
+<li>检查是否可写。<code>-w file</code>，检查file是否存在并可写。</li>
+<li>检查文件是否可以执行。<code>-x file</code>，检查file是否存在并可执行。</li>
+<li>检查所属关系。<code>-O file</code>，检查file是否存在并属于当前用户所有。</li>
+<li>检查默认属主关系。<code>-G file</code>，检查file是否存在并且默认组与当前用户相同。</li>
+<li>检查文件日期。<code>file1 -nt file2</code>，检查file1是否比file2新。<code>file1 -ot file2</code>，检查file1是否比file2旧。</li>
+</ol>
+</li>
+</ol>
+<h3 id="复合条件测试"><a href="#复合条件测试" class="headerlink" title="复合条件测试"></a>复合条件测试</h3><ol>
+<li>允许使用 <code>&amp;&amp;</code> 和 <code>||</code> 连接多个condition。</li>
+</ol>
+<h3 id="if-then-高级特性"><a href="#if-then-高级特性" class="headerlink" title="if-then 高级特性"></a><code>if-then</code> 高级特性</h3><ol>
+<li>双括号。双括号命令运行在比较过程中使用高级数学符号。（几乎是所有c中的运算都能用）并且在双括号中不需要对&gt;和&lt;进行转义。 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">var=10</span><br><span class="line">if (( var ** 2 &lt; 1000 ))</span><br><span class="line">then</span><br><span class="line">    var=$(( var-- ))</span><br><span class="line">fi</span><br></pre></td></tr></table></figure></li>
+<li>双方括号。双方括号中可以使用模式匹配。例如 [[ $USER == r* ]]，这里使用了==，右边的r*就是一个模式。</li>
+</ol>
+<h3 id="case-命令"><a href="#case-命令" class="headerlink" title="case 命令"></a><code>case</code> 命令</h3><p>类似switch命令，格式如下</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">case variable in</span><br><span class="line">pattern1 | pattern2) commands1;;</span><br><span class="line">pattern3) commands2;;</span><br><span class="line">*) commands3;;</span><br><span class="line">esac</span><br></pre></td></tr></table></figure>
+<h3 id="for-命令"><a href="#for-命令" class="headerlink" title="for 命令"></a><code>for</code> 命令</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">for var in list</span><br><span class="line">do </span><br><span class="line">    commands</span><br><span class="line">done</span><br></pre></td></tr></table></figure>
+<p>在<code>list</code>参数中，需要提供迭代中要用到的一系列值。</p>
+<ol>
+<li><p>读取列表中的值。<code>for</code>命令最基本的用法就是遍历<code>for</code>命令本身所定义的一系列值。<br>在最后一次迭代后，<code>$test</code>的值会在shell脚本的剩余部分一直保持有效。</p>
+ <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">for test in aaa bbb ccc ddd</span><br><span class="line">do</span><br><span class="line">    echo $test</span><br><span class="line">done</span><br></pre></td></tr></table></figure></li>
+<li><p>读取列表中的复杂值。</p>
+<p> 如果列表中的值存在单引号，可以用如下两种方式：1.使用转义，2.使用双引号。</p>
+ <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">for test in I don\&#x27;t know if &quot;this&#x27;ll&quot; work</span><br><span class="line">do</span><br><span class="line">    echo $test</span><br><span class="line">done</span><br></pre></td></tr></table></figure>
+<p>如果存在空格，必须使用双引号把这个值框起来。</p>
+</li>
+<li><p>从变量读取列表</p>
+ <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">list=&quot;aaa bbb ccc&quot;</span><br><span class="line">list=$list&quot; ddd&quot;</span><br><span class="line">for test in list</span><br><span class="line">do</span><br><span class="line">    echo $test</span><br><span class="line">done</span><br></pre></td></tr></table></figure></li>
+<li><p>从命令读取值</p>
+ <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">file=testfile.txt</span><br><span class="line">for test in $(cat $file)</span><br><span class="line">do</span><br><span class="line">    echo $test</span><br><span class="line">done</span><br></pre></td></tr></table></figure></li>
+<li><p>更改字段分隔符</p>
+<p>内部字段分隔符，<code>IFS</code>环境变量定义了bash shell用作字段分隔符的一系列字符。默认情况下，bash shell会将下列字符当作字段分隔符：1. 空格，2. 制表符，3. 换行符</p>
+<ol>
+<li>修改<code>IFS</code>，例如，<code>IFS=$&#39;\n&#39;</code>。这里注意用<code>$&#39;\n&#39;</code>，<code>$&#39;string&#39;</code>是用来表示带转义序列的字符串文字的语法 (called ANSI C-quoted strings)</li>
+<li>指定多个的时候只需要简单拼接。<code>IFS=$&#39;\n&#39;:;&quot;</code></li>
+</ol>
+</li>
+<li><p>用通配符读取目录</p>
+<p>必须使用通配符，它会强制shell使用文件扩展匹配。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">for file in /home/yiming/*</span><br><span class="line">do</span><br><span class="line">    if [ -d &quot;$file&quot; ]</span><br><span class="line">    then</span><br><span class="line">        echo &quot;$file is a directory&quot;</span><br><span class="line">    fi</span><br><span class="line">done</span><br></pre></td></tr></table></figure>
+<p>注意这里”$file”应对文件名带空格的情况。同时可以使用多个通配符拼接，通配符加目录一起使用</p>
+</li>
+</ol>
+<h3 id="C风格for"><a href="#C风格for" class="headerlink" title="C风格for"></a>C风格<code>for</code></h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">for (( variable assignment ; condition ; iteration process ))</span><br></pre></td></tr></table></figure>
+<ol>
+<li><p>变量赋值可以用空格</p>
+</li>
+<li><p>条件中的变量不已美元开头</p>
+</li>
+<li><p>迭代过程的算式不使用expr表达式</p>
+</li>
+</ol>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">for (( i=1 ; i&lt;=10 ; i++ ))</span><br><span class="line">do</span><br><span class="line">    echo $i</span><br><span class="line">done</span><br><span class="line"></span><br><span class="line">for (( a=1, b=10; a&lt;=10; a++, b-- ))</span><br><span class="line">do</span><br><span class="line">    echo &quot;$a - $b&quot;</span><br><span class="line">done</span><br></pre></td></tr></table></figure>
+<h3 id="while-命令"><a href="#while-命令" class="headerlink" title="while 命令"></a><code>while</code> 命令</h3><ol>
+<li>基本格式</li>
+</ol>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">while test command</span><br><span class="line">do</span><br><span class="line">    other command</span><br><span class="line">done</span><br></pre></td></tr></table></figure>
+<p>   这里的<code>test command</code>和<code>if-else</code>语句一模一样。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">var1=10</span><br><span class="line">while [ $var -gt 1 ]</span><br><span class="line">do</span><br><span class="line">    var1=$(( var - 1 ))</span><br><span class="line">done</span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li><p>使用多个测试命令</p>
+<p>while 命令允许你在while语句定义多个测试命令，只有最后一个测试命令的退出状态码会被用来决定什么时候退出循环。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">var1=10</span><br><span class="line">while echo $var1</span><br><span class="line">         [ $var1 -ge 0 ]</span><br><span class="line">do</span><br><span class="line">     var=$(( var1 - 1 ))</span><br><span class="line">done </span><br></pre></td></tr></table></figure>
+<h3 id="until-命令"><a href="#until-命令" class="headerlink" title="until 命令"></a><code>until</code> 命令</h3></li>
+</ol>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">until test commands</span><br><span class="line">do</span><br><span class="line">    other commands</span><br><span class="line">done</span><br></pre></td></tr></table></figure>
+<p>本质是和<code>while</code>相反的语句。</p>
+<h3 id="循环控制"><a href="#循环控制" class="headerlink" title="循环控制"></a>循环控制</h3><ol>
+<li><code>break</code>命令。直接使用<code>break</code>命令会跳出当前正在执行的循环。可以使用 <code>break n</code>来指定跳出的层数，默认n=1也就是跳出当前循环。</li>
+<li><code>continue</code>命令。和<code>break</code>相同，可以使用<code>continue n</code>的语法指定继续执行哪一级的循环。</li>
+</ol>
+<h3 id="处理循环的输出"><a href="#处理循环的输出" class="headerlink" title="处理循环的输出"></a>处理循环的输出</h3><p>在shell脚本中可以对循环的输出使用管道或进行重定向。可以通过在<code>done</code>命令后添加一个处理命令来实现。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 重定向例子</span></span><br><span class="line">for (( a=1; a&lt;=10; a++))</span><br><span class="line">do</span><br><span class="line">    echo $a</span><br><span class="line">done &gt; output.txt</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 也可以使用重定向进行输入，然后用<span class="built_in">read</span>命令处理</span></span><br><span class="line">input=&quot;users.csv&quot;</span><br><span class="line">while IFS=&#x27;,&#x27; read -r userid name</span><br><span class="line">do</span><br><span class="line">    echo &quot;adding $userid&quot;</span><br><span class="line">    useradd -c &quot;$name&quot; -m $userid</span><br><span class="line">done &lt; &quot;$input&quot;</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 管道例子</span></span><br><span class="line">for (( a=1; a&lt;=10; a++))</span><br><span class="line">do</span><br><span class="line">    echo $a</span><br><span class="line">done | sort</span><br></pre></td></tr></table></figure></div><div class="article-licensing box"><div class="licensing-title"><p>shell脚本结构化命令</p><p><a href="http://example.com/2021/01/08/shell脚本结构化命令/">http://example.com/2021/01/08/shell脚本结构化命令/</a></p></div><div class="licensing-meta level is-mobile"><div class="level-left"><div class="level-item is-narrow"><div><h6>Author</h6><p>Yiming He</p></div></div><div class="level-item is-narrow"><div><h6>Posted on</h6><p>2021-01-08</p></div></div><div class="level-item is-narrow"><div><h6>Updated on</h6><p>2021-01-08</p></div></div><div class="level-item is-narrow"><div><h6>Licensed under</h6><p><a class="icon" rel="noopener" target="_blank" title="Creative Commons" href="https://creativecommons.org/"><i class="fab fa-creative-commons"></i></a><a class="icon" rel="noopener" target="_blank" title="Attribution" href="https://creativecommons.org/licenses/by/4.0/"><i class="fab fa-creative-commons-by"></i></a><a class="icon" rel="noopener" target="_blank" title="Noncommercial" href="https://creativecommons.org/licenses/by-nc/4.0/"><i class="fab fa-creative-commons-nc"></i></a></p></div></div></div></div></div><div class="article-tags is-size-7 mb-4"><span class="mr-2">#</span><a class="link-muted mr-2" rel="tag" href="/tags/shell-programming/">shell programming</a></div><div class="sharethis-inline-share-buttons"></div><script src="https://platform-api.sharethis.com/js/sharethis.js#property=5ff82d83d7d501001255ad9d&amp;product=sticky-share-buttons" defer></script></article></div><!--!--><nav class="post-navigation mt-4 level is-mobile"><div class="level-end"><a class="article-nav-next level level-item link-muted" href="/2021/01/08/shell%E8%84%9A%E6%9C%AC%E6%9E%84%E5%BB%BA/"><span class="level-item">shell脚本构建</span><i class="level-item fas fa-chevron-right"></i></a></div></nav><div class="card"><div class="card-content"><h3 class="title is-5">Comments</h3><div id="comment-container"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1.6.2/dist/gitalk.css"><script src="https://cdn.jsdelivr.net/npm/gitalk@1.6.2/dist/gitalk.min.js"></script><script>var gitalk = new Gitalk({
+            id: "858114c9029bd81f4e3706f773c7c27e",
+            repo: "afawa.github.io",
+            owner: "afawa",
+            clientID: "ad49fd64876339d5ddc6",
+            clientSecret: "c34cd6c177e1310c81d20ff9b5efea8c05b1a546",
+            admin: ["afawa"],
+            createIssueManually: false,
+            distractionFreeMode: false,
+            perPage: 10,
+            pagerDirection: "last",
+            
+            
+            enableHotKey: true,
+            
+        })
+        gitalk.render('comment-container')</script></div></div></div><div class="column column-left is-4-tablet is-4-desktop is-4-widescreen  order-1"><div class="card widget" data-type="profile"><div class="card-content"><nav class="level"><div class="level-item has-text-centered flex-shrink-1"><div><figure class="image is-128x128 mx-auto mb-2"><img class="avatar" src="https://www.gravatar.com/avatar/7294810b6de79057ee82d65b7d2b2d3c?s=128" alt="Yiming"></figure><p class="title is-size-4 is-block" style="line-height:inherit;">Yiming</p><p class="is-size-6 is-block">Student</p><p class="is-size-6 is-flex justify-content-center"><i class="fas fa-map-marker-alt mr-1"></i><span>China,Beijing</span></p></div></div></nav><nav class="level is-mobile"><div class="level-item has-text-centered is-marginless"><div><p class="heading">Posts</p><a href="/archives"><p class="title">2</p></a></div></div><div class="level-item has-text-centered is-marginless"><div><p class="heading">Category</p><a href="/categories"><p class="title">1</p></a></div></div><div class="level-item has-text-centered is-marginless"><div><p class="heading">Tag</p><a href="/tags"><p class="title">1</p></a></div></div></nav><div class="level"><a class="level-item button is-primary is-rounded" href="https://github.com/afawa" target="_blank" rel="noopener">Follow</a></div><div class="level is-mobile"><a class="level-item button is-transparent is-marginless" target="_blank" rel="noopener" title="Github" href="https://github.com/afawa"><i class="fab fa-github"></i></a></div></div></div><div class="card widget" id="toc" data-type="toc"><div class="card-content"><div class="menu"><h3 class="menu-label">Catalogue</h3><ul class="menu-list"><li><a class="level is-mobile" href="#结构化命令"><span class="level-left"><span class="level-item">1</span><span class="level-item">结构化命令</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#if-then-语句"><span class="level-left"><span class="level-item">1.1</span><span class="level-item">if-then 语句</span></span></a></li><li><a class="level is-mobile" href="#if-then-else-语句"><span class="level-left"><span class="level-item">1.2</span><span class="level-item">if-then-else 语句</span></span></a></li><li><a class="level is-mobile" href="#嵌套if"><span class="level-left"><span class="level-item">1.3</span><span class="level-item">嵌套if</span></span></a></li><li><a class="level is-mobile" href="#test-命令"><span class="level-left"><span class="level-item">1.4</span><span class="level-item">test 命令</span></span></a></li><li><a class="level is-mobile" href="#复合条件测试"><span class="level-left"><span class="level-item">1.5</span><span class="level-item">复合条件测试</span></span></a></li><li><a class="level is-mobile" href="#if-then-高级特性"><span class="level-left"><span class="level-item">1.6</span><span class="level-item">if-then 高级特性</span></span></a></li><li><a class="level is-mobile" href="#case-命令"><span class="level-left"><span class="level-item">1.7</span><span class="level-item">case 命令</span></span></a></li><li><a class="level is-mobile" href="#for-命令"><span class="level-left"><span class="level-item">1.8</span><span class="level-item">for 命令</span></span></a></li><li><a class="level is-mobile" href="#C风格for"><span class="level-left"><span class="level-item">1.9</span><span class="level-item">C风格for</span></span></a></li><li><a class="level is-mobile" href="#while-命令"><span class="level-left"><span class="level-item">1.10</span><span class="level-item">while 命令</span></span></a></li><li><a class="level is-mobile" href="#until-命令"><span class="level-left"><span class="level-item">1.11</span><span class="level-item">until 命令</span></span></a></li><li><a class="level is-mobile" href="#循环控制"><span class="level-left"><span class="level-item">1.12</span><span class="level-item">循环控制</span></span></a></li><li><a class="level is-mobile" href="#处理循环的输出"><span class="level-left"><span class="level-item">1.13</span><span class="level-item">处理循环的输出</span></span></a></li></ul></li></ul></div></div><style>#toc .menu-list > li > a.is-active + .menu-list { display: block; }#toc .menu-list > li > a + .menu-list { display: none; }</style><script src="/js/toc.js" defer></script></div><div class="card widget" data-type="categories"><div class="card-content"><div class="menu"><h3 class="menu-label">Categories</h3><ul class="menu-list"><li><a class="level is-mobile" href="/categories/programming-language/"><span class="level-start"><span class="level-item">programming language</span></span><span class="level-end"><span class="level-item tag">2</span></span></a></li></ul></div></div></div></div><!--!--></div></div></section><footer class="footer"><div class="container"><div class="level"><div class="level-start"><a class="footer-logo is-block mb-2" href="/"><img src="/img/logo.svg" alt="Yiming&#039;s Blog" height="28"></a><p class="is-size-7"><span>&copy; 2021 Yiming He</span>  Powered by <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a> &amp; <a href="https://github.com/ppoffice/hexo-theme-icarus" target="_blank" rel="noopener">Icarus</a></p></div><div class="level-end"><div class="field has-addons"><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Creative Commons" href="https://creativecommons.org/"><i class="fab fa-creative-commons"></i></a></p><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Attribution 4.0 International" href="https://creativecommons.org/licenses/by/4.0/"><i class="fab fa-creative-commons-by"></i></a></p><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Download on GitHub" href="https://github.com/ppoffice/hexo-theme-icarus"><i class="fab fa-github"></i></a></p></div></div></div></div></footer><script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/moment@2.22.2/min/moment-with-locales.min.js"></script><script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.4/dist/clipboard.min.js" async></script><script>moment.locale("en");</script><script>var IcarusThemeSettings = {
+            article: {
+                highlight: {
+                    clipboard: true,
+                    fold: 'unfolded'
+                }
+            }
+        };</script><script src="/js/column.js"></script><script src="/js/animation.js"></script><a id="back-to-top" title="Back to top" href="javascript:;"><i class="fas fa-chevron-up"></i></a><script src="/js/back_to_top.js" defer></script><!--!--><!--!--><!--!--><script src="https://cdn.jsdelivr.net/npm/cookieconsent@3.1.1/build/cookieconsent.min.js" defer></script><script>window.addEventListener("load", () => {
+      window.cookieconsent.initialise({
+        type: "info",
+        theme: "edgeless",
+        static: false,
+        position: "bottom-left",
+        content: {
+          message: "This website uses cookies to improve your experience.",
+          dismiss: "Got it!",
+          allow: "Allow cookies",
+          deny: "Decline",
+          link: "Learn more",
+          policy: "Cookie Policy",
+          href: "https://www.cookiesandyou.com/",
+        },
+        palette: {
+          popup: {
+            background: "#edeff5",
+            text: "#838391"
+          },
+          button: {
+            background: "#4b81e8"
+          },
+        },
+      });
+    });</script><script src="https://cdn.jsdelivr.net/npm/lightgallery@1.6.8/dist/js/lightgallery.min.js" defer></script><script src="https://cdn.jsdelivr.net/npm/justifiedGallery@3.7.0/dist/js/jquery.justifiedGallery.min.js" defer></script><script>window.addEventListener("load", () => {
+            if (typeof $.fn.lightGallery === 'function') {
+                $('.article').lightGallery({ selector: '.gallery-item' });
+            }
+            if (typeof $.fn.justifiedGallery === 'function') {
+                if ($('.justified-gallery > p > .gallery-item').length) {
+                    $('.justified-gallery > p > .gallery-item').unwrap();
+                }
+                $('.justified-gallery').justifiedGallery();
+            }
+        });</script><!--!--><!--!--><!--!--><!--!--><!--!--><script src="/js/main.js" defer></script><div class="searchbox"><div class="searchbox-container"><div class="searchbox-header"><div class="searchbox-input-container"><input class="searchbox-input" type="text" placeholder="Type something..."></div><a class="searchbox-close" href="javascript:;">×</a></div><div class="searchbox-body"></div></div></div><script src="/js/insight.js" defer></script><script>document.addEventListener('DOMContentLoaded', function () {
+            loadInsight({"contentUrl":"/content.json"}, {"hint":"Type something...","untitled":"(Untitled)","posts":"Posts","pages":"Pages","categories":"Categories","tags":"Tags"});
+        });</script></body></html>
