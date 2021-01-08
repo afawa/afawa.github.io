@@ -3,6 +3,7 @@ title: shell脚本构建
 date: 2021-01-08 17:24:10
 tags: shell programming
 categories: programming language
+toc: true
 ---
 
 ## 构建基本shell脚本
@@ -12,6 +13,8 @@ categories: programming language
 1. `echo` 命令，使用""和‘’进行区分
 2. `echo -n` 随后的输出不会换行
 3. `$name`，`${name}` 引用变量 ，使用`\$`进行转义
+
+<!--more-->
 
 ### 命令替换
 
@@ -24,13 +27,13 @@ categories: programming language
 1. \>\> 重定向输出并且不会清空文件原有的内容
 
 2. 内联输入重定向符号 <<，除了这个符号，你必须指定一个文本标记来划分输入数据的开始和结尾 
-```shell
-$ wc << EOF
-> test string 1
-> test string 2
-> test string 3
-> EOF
-```
+    ```shell
+    $ wc << EOF
+    > test string 1
+    > test string 2
+    > test string 3
+    > EOF
+    ```
 
 ### 执行数学运算
 
@@ -41,11 +44,11 @@ $ wc << EOF
 3. bash shell 原生只支持整形运算
 
 4. 在bash中使用浮点运算的一种方式是使用内建计算器bc，在脚本中使用bc，可以使用命令替换+管道的方式，例如 
-```shell
-var1=100
-var2=45
-var=$(echo "scale=4; $var1 / $var2" | bc)
-```
+    ```shell
+    var1=100
+    var2=45
+    var=$(echo "scale=4; $var1 / $var2" | bc)
+    ```
    或者使用内联输入重定向，例如
    ```shell
     var=$( bc << EOF

@@ -223,12 +223,12 @@ widgets:
     position: right
   - type: tags
     position: right
-  - type: links
-    position: left
-    links:
-      Google: 'https://google.com'
-      Baidu: 'https://baidu.com'
-      Github: 'https://github.com'
+#   - type: links
+#     position: left
+#     links:
+#       Google: 'https://google.com'
+#       Baidu: 'https://baidu.com'
+#       Github: 'https://github.com'
 # Plugin configurations
 # https://ppoffice.github.io/hexo-theme-icarus/categories/Plugins/
 plugins:
