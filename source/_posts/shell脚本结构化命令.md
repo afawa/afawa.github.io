@@ -10,7 +10,7 @@ toc: true
 
 ### `if-then` 语句
 
-``` shell
+``` bash
 if command
 then
     commands
@@ -24,7 +24,7 @@ fi
 2. 运行`if`语句中的错误信息依然会显示，可以用某些方法避免
 
 3. 另一种形式
-    ```shell
+    ``` bash
     if command; then
         commands
     fi
@@ -32,7 +32,7 @@ fi
 
 ### `if-then-else` 语句
 
-```shell
+``` bash
 if command
 then
     commands
@@ -45,7 +45,7 @@ fi
 
 ### 嵌套if
 
-```shell
+``` bash
 if command1
 then
     commands
@@ -57,7 +57,7 @@ fi
 
 如果`test`命令中列出的条件成立，`test`命令就会退出并返回退出码0。如果condition部分本身为空，那么`test`以非零返回。
 
-```shell
+``` bash
 # test 命令
 test condition
 # test 命令结合if-else
@@ -69,7 +69,7 @@ fi
 
 bash 提供了另一种测试方式，不需要声明`test`命令。方括号定义了测试条件，第一个方括号后和第二个方括号前必须加上一个空格。
 
-```shell
+``` bash
 if [ condition ]
 then
     commands
@@ -103,7 +103,7 @@ fi
 ### `if-then` 高级特性
 
 1. 双括号。双括号命令运行在比较过程中使用高级数学符号。（几乎是所有c中的运算都能用）并且在双括号中不需要对>和<进行转义。
-    ```shell
+    ``` bash
     var=10
     if (( var ** 2 < 1000 ))
     then
@@ -116,7 +116,7 @@ fi
 
 类似switch命令，格式如下
 
-```shell
+``` bash
 case variable in
 pattern1 | pattern2) commands1;;
 pattern3) commands2;;
@@ -126,7 +126,7 @@ esac
 
 ### `for` 命令
 
-```shell
+``` bash
 for var in list
 do 
     commands
@@ -137,7 +137,7 @@ done
 
 1. 读取列表中的值。`for`命令最基本的用法就是遍历`for`命令本身所定义的一系列值。
    在最后一次迭代后，`$test`的值会在shell脚本的剩余部分一直保持有效。
-    ```shell
+    ``` bash
     for test in aaa bbb ccc ddd
     do
         echo $test
@@ -147,7 +147,7 @@ done
 2. 读取列表中的复杂值。
 
     如果列表中的值存在单引号，可以用如下两种方式：1.使用转义，2.使用双引号。
-    ```shell
+    ``` bash
     for test in I don\'t know if "this'll" work
     do
         echo $test
@@ -158,7 +158,7 @@ done
 
 3. 从变量读取列表
 
-    ```shell
+    ``` bash
     list="aaa bbb ccc"
     list=$list" ddd"
     for test in list
@@ -169,7 +169,7 @@ done
 
 4. 从命令读取值
 
-    ```shell
+    ``` bash
     file=testfile.txt
     for test in $(cat $file)
     do
@@ -188,7 +188,7 @@ done
 
    必须使用通配符，它会强制shell使用文件扩展匹配。
 
-   ```shell
+   ``` bash
     for file in /home/yiming/*
     do
         if [ -d "$file" ]
@@ -201,7 +201,7 @@ done
    注意这里"$file"应对文件名带空格的情况。同时可以使用多个通配符拼接，通配符加目录一起使用
 
 ### C风格`for`
-```shell
+``` bash
 for (( variable assignment ; condition ; iteration process ))
 ```
 
@@ -211,7 +211,7 @@ for (( variable assignment ; condition ; iteration process ))
 
 3. 迭代过程的算式不使用expr表达式
 
-```shell
+``` bash
 for (( i=1 ; i<=10 ; i++ ))
 do
     echo $i
@@ -227,7 +227,7 @@ done
 
 1. 基本格式
 
-```shell
+``` bash
 while test command
 do
     other command
@@ -236,7 +236,7 @@ done
 
    这里的`test command`和`if-else`语句一模一样。
 
-```shell
+``` bash
 var1=10
 while [ $var -gt 1 ]
 do
@@ -248,7 +248,7 @@ done
 
    while 命令允许你在while语句定义多个测试命令，只有最后一个测试命令的退出状态码会被用来决定什么时候退出循环。
 
-   ```shell
+   ``` bash
    var1=10
    while echo $var1
             [ $var1 -ge 0 ]
@@ -259,7 +259,7 @@ done
 
 ### `until` 命令
 
-```shell
+``` bash
 until test commands
 do
     other commands
@@ -277,7 +277,7 @@ done
 
 在shell脚本中可以对循环的输出使用管道或进行重定向。可以通过在`done`命令后添加一个处理命令来实现。
 
-```shell
+``` bash
 # 重定向例子
 for (( a=1; a<=10; a++))
 do

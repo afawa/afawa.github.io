@@ -27,7 +27,7 @@ toc: true
 1. \>\> 重定向输出并且不会清空文件原有的内容
 
 2. 内联输入重定向符号 <<，除了这个符号，你必须指定一个文本标记来划分输入数据的开始和结尾 
-    ```shell
+    ``` bash
     $ wc << EOF
     > test string 1
     > test string 2
@@ -44,13 +44,13 @@ toc: true
 3. bash shell 原生只支持整形运算
 
 4. 在bash中使用浮点运算的一种方式是使用内建计算器bc，在脚本中使用bc，可以使用命令替换+管道的方式，例如 
-    ```shell
+    ``` bash
     var1=100
     var2=45
     var=$(echo "scale=4; $var1 / $var2" | bc)
     ```
    或者使用内联输入重定向，例如
-   ```shell
+   ``` bash
     var=$( bc << EOF
     scale=4
     a1 = ($var1 * $var2)

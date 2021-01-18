@@ -1,17 +1,10 @@
 widgets:
-  - type: profile
-    position: left
-    author: Yiming
-    location: China,Beijing
-    author_title: Student
-    gravatar: 1700012786@pku.edu.cn 
-    follow_link: 'https://github.com/afawa'
-    social_links:
-      Github:
-          icon: fab fa-github
-          url: 'https://github.com/afawa'
   - type: toc
     position: left
     index: true
   - type: categories
     position: left
+
+sidebar:
+    left:
+        sticky: true 

@@ -204,7 +204,7 @@ sidebar:
 widgets:
   - type: profile
     position: left
-    author: Yiming
+    author: 'Yiming He'
     location: China,Beijing
     author_title: Student
     gravatar: 1700012786@pku.edu.cn 

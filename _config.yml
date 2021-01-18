@@ -2,10 +2,10 @@ title: Yiming's Blog
 subtitle: ''
 description: ''
 keywords: Peking University
-author: Yiming He
+author: 'Yiming He'
 language: en
 timezone: ''
-url: 'http://example.com'
+url: 'https://afawa.github.io/'
 root: /
 permalink: ':year/:month/:day/:title/'
 permalink_defaults: null
