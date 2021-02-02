@@ -1,0 +1,368 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"><meta><title>linux 文件操作 - Yiming&#039;s Blog</title><link rel="manifest" href="/manifest.json"><meta name="application-name" content="Yiming&#039;s Blog"><meta name="msapplication-TileImage" content="/img/favicon.svg"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Yiming&#039;s Blog"><meta name="apple-mobile-web-app-status-bar-style" content="default"><meta name="description" content="linux 文件操作linux 文件结构在linux中，一切皆文件。对应文件操作有5个基本的函数open，read，write，close，ioctl。linux中任何事物都可以用一个文件来表示，或者通过特殊的文件提供。下面是一些会用到的特殊文件。"><meta property="og:type" content="blog"><meta property="og:title" content="linux 文件操作"><meta property="og:url" content="https://afawa.github.io/2021/01/28/linux-%E6%96%87%E4%BB%B6%E6%93%8D%E4%BD%9C/"><meta property="og:site_name" content="Yiming&#039;s Blog"><meta property="og:description" content="linux 文件操作linux 文件结构在linux中，一切皆文件。对应文件操作有5个基本的函数open，read，write，close，ioctl。linux中任何事物都可以用一个文件来表示，或者通过特殊的文件提供。下面是一些会用到的特殊文件。"><meta property="og:locale" content="en_US"><meta property="og:image" content="https://afawa.github.io/images/linux-%E6%96%87%E4%BB%B6%E6%93%8D%E4%BD%9C/image1.png"><meta property="article:published_time" content="2021-01-28T06:57:58.000Z"><meta property="article:modified_time" content="2021-02-02T15:15:04.453Z"><meta property="article:author" content="Yiming He"><meta property="article:tag" content="linux programming"><meta property="twitter:card" content="summary"><meta property="twitter:image" content="/images/linux-%E6%96%87%E4%BB%B6%E6%93%8D%E4%BD%9C/image1.png"><script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https://afawa.github.io/2021/01/28/linux-%E6%96%87%E4%BB%B6%E6%93%8D%E4%BD%9C/"},"headline":"Yiming's Blog","image":["https://afawa.github.io/images/linux-%E6%96%87%E4%BB%B6%E6%93%8D%E4%BD%9C/image1.png"],"datePublished":"2021-01-28T06:57:58.000Z","dateModified":"2021-02-02T15:15:04.453Z","author":{"@type":"Person","name":"Yiming He"},"description":"linux 文件操作linux 文件结构在linux中，一切皆文件。对应文件操作有5个基本的函数open，read，write，close，ioctl。linux中任何事物都可以用一个文件来表示，或者通过特殊的文件提供。下面是一些会用到的特殊文件。"}</script><link rel="canonical" href="https://afawa.github.io/2021/01/28/linux-%E6%96%87%E4%BB%B6%E6%93%8D%E4%BD%9C/"><link rel="icon" href="/img/favicon.svg"><link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.12.0/css/all.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@9.12.0/styles/atom-one-dark.css"><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@400;600&amp;family=Source+Code+Pro"><link rel="stylesheet" href="/css/default.css"><style>body>.footer,body>.navbar,body>.section{opacity:0}</style><!--!--><!--!--><!--!--><script src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" defer></script><!--!--><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/cookieconsent@3.1.1/build/cookieconsent.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lightgallery@1.6.8/dist/css/lightgallery.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/justifiedGallery@3.7.0/dist/css/justifiedGallery.min.css"><!--!--><!--!--><!--!--><script src="https://cdn.jsdelivr.net/npm/pace-js@1.0.2/pace.min.js"></script><!--!--><!--!--><meta name="generator" content="Hexo 5.3.0"></head><body class="is-2-column"><nav class="navbar navbar-main"><div class="container"><div class="navbar-brand justify-content-center"><a class="navbar-item navbar-logo" href="/"><img src="/img/logo.svg" alt="Yiming&#039;s Blog" height="28"></a></div><div class="navbar-menu"><div class="navbar-start"><a class="navbar-item" href="/">Home</a><a class="navbar-item" href="/archives">Archives</a><a class="navbar-item" href="/categories">Categories</a><a class="navbar-item" href="/tags">Tags</a><a class="navbar-item" href="/about">About</a></div><div class="navbar-end"><a class="navbar-item" target="_blank" rel="noopener" title="Download on GitHub" href="https://github.com/ppoffice/hexo-theme-icarus"><i class="fab fa-github"></i></a><a class="navbar-item is-hidden-tablet catalogue" title="Catalogue" href="javascript:;"><i class="fas fa-list-ul"></i></a><a class="navbar-item search" title="Search" href="javascript:;"><i class="fas fa-search"></i></a></div></div></div></nav><section class="section"><div class="container"><div class="columns"><div class="column order-2 column-main is-8-tablet is-8-desktop is-8-widescreen"><div class="card"><article class="card-content article" role="article"><div class="article-meta is-size-7 is-uppercase level is-mobile"><div class="level-left"><span class="level-item">Posted&nbsp;<time dateTime="2021-01-28T06:57:58.000Z" title="2021-01-28T06:57:58.000Z">2021-01-28</time></span><span class="level-item">Updated&nbsp;<time dateTime="2021-02-02T15:15:04.453Z" title="2021-02-02T15:15:04.453Z">2021-02-02</time></span><span class="level-item"><a class="link-muted" href="/categories/linux/">linux</a></span><span class="level-item">43 minutes read (About 6483 words)</span><span class="level-item" id="busuanzi_container_page_pv"><span id="busuanzi_value_page_pv">0</span>&nbsp;visits</span></div></div><h1 class="title is-3 is-size-4-mobile">linux 文件操作</h1><div class="content"><h1 id="linux-文件操作"><a href="#linux-文件操作" class="headerlink" title="linux 文件操作"></a>linux 文件操作</h1><h2 id="linux-文件结构"><a href="#linux-文件结构" class="headerlink" title="linux 文件结构"></a>linux 文件结构</h2><p>在linux中，一切皆文件。对应文件操作有5个基本的函数<code>open</code>，<code>read</code>，<code>write</code>，<code>close</code>，<code>ioctl</code>。linux中任何事物都可以用一个文件来表示，或者通过特殊的文件提供。下面是一些会用到的特殊文件。</p>
+<a id="more"></a>
+
+<h3 id="目录"><a href="#目录" class="headerlink" title="目录"></a>目录</h3><p>目录是用于保存其他文件的节点号和名字的文件。目录文件中的每个数据项都是指向某个文件节点的链接。</p>
+<p><img src="/images/linux-%E6%96%87%E4%BB%B6%E6%93%8D%E4%BD%9C/image1.png"></p>
+<h3 id="文件和设备"><a href="#文件和设备" class="headerlink" title="文件和设备"></a>文件和设备</h3><p>unix和linux中比较重要的设备文件有3个。</p>
+<ol>
+<li><code>/dev/console</code>。这个设备代表的是系统控制台。错误信息和诊断信息通常会被发送到这个设备。每个unix设备都会有一个指定的终端或显示屏来接收控制台消息。</li>
+<li><code>/dev/tty</code>。如果一个进程有控制终端的话，那么特殊文件<code>/dev/tty</code>就是这个控制终端。如果是系统自动允许的进程和脚本就没有控制终端，所以它们不能打开<code>/dev/tty</code>。在能够使用该设备文件的情况下，<code>/dev/tty</code>允许程序直接向用户提供输出信息，而不管用户具体使用的是什么类型的伪终端或硬件终端。<code>/dev/console</code>设备只有一个，<code>/dev/tty</code>能访问不同的物理设备。</li>
+<li><code>dev/null</code>。所有写向这个设备的输出都会被丢弃，所有读这个设备的操作会立刻得到一个文件尾标志。</li>
+</ol>
+<h2 id="系统调用和设备驱动程序"><a href="#系统调用和设备驱动程序" class="headerlink" title="系统调用和设备驱动程序"></a>系统调用和设备驱动程序</h2><p>只需要使用少量的函数就可以对文件和设备进行控制和访问。这些函数被称为系统调用。操作系统的核心部分，内核，是一组设备驱动程序。它们是一组对系统硬件进行控制的底层接口。为了向用户提供一个一致的接口，设备驱动程序封装了所有与硬件相关的特性。硬件特有的功能通常可以用<code>ioctl</code>系统调用来提供。<code>/dev</code>目录中的设备文件的用法是相同的，它们都可以被打开、读、写和关闭。下面是用于访问设备驱动程序的底层函数（系统调用）。</p>
+<ol>
+<li><code>open</code>：打卡文件或者设备</li>
+<li><code>read</code>：从打开的文件或设备写数据</li>
+<li><code>write</code>：向文件或者设备写数据</li>
+<li><code>close</code>：关闭文件或设备</li>
+<li><code>ioctl</code>：把控制信息传递给设备驱动程序。它踢馆一些与特定硬件有关的必要控制，用法随设备的不同而不同。</li>
+</ol>
+<h2 id="库函数"><a href="#库函数" class="headerlink" title="库函数"></a>库函数</h2><p>直接使用底层系统调用的问题是效率低下。因为系统调用会影响系统的性能（系统调用相比一般的函数调用开销更大），硬件也会限制对底层系统调用一次所能读写的数据块的大小。linux发行版提供了一系列更高层的接口（标准函数库）。</p>
+<h2 id="底层文件访问"><a href="#底层文件访问" class="headerlink" title="底层文件访问"></a>底层文件访问</h2><h3 id="write系统调用"><a href="#write系统调用" class="headerlink" title="write系统调用"></a><code>write</code>系统调用</h3><p>系统调用<code>write</code>函数的作用是把缓冲区<code>buf</code>的前<code>nbytes</code>个字节写入与文件描述符<code>fildes</code>关联的文件中。返回实际写入的字节数。如果文件描述符有错或者底层的驱动程序对数据块长度比较敏感，该返回值可能会小于<code>nbytes</code>。如果这个函数返回0，就表示没有写入任何数据；如果返回-1，就表示<code>write</code>在执行的过程中出现了错误，错误代表保存在全局变量<code>errno</code>里。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">size_t</span> <span class="title">write</span><span class="params">(<span class="keyword">int</span> fildes, <span class="keyword">const</span> <span class="keyword">void</span> *buf, <span class="keyword">size_t</span> nbytes)</span></span>;</span><br></pre></td></tr></table></figure>
+<p>下面是一个简单的程序</p>
+<script src="https://gist.github.com/afawa/3056d8ba48490ad8e66ee470bc53b3fd.js"></script>
+
+<p>输出如下：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ ./simple_write</span><br><span class="line">Here is some data</span><br><span class="line">$ </span><br></pre></td></tr></table></figure>
+<p>需要注意的是，<code>write</code>可能会报告写入的字节比要求的少，这不一定是一个错误。在程序中需要检测<code>errno</code>已发现错误，然后再次调用<code>write</code>写入剩余的数据。</p>
+<h3 id="read系统调用"><a href="#read系统调用" class="headerlink" title="read系统调用"></a><code>read</code>系统调用</h3><p>系统调用<code>read</code>的作用是：从与文件描述符<code>fildes</code>相关联的文件里读入<code>nbytes</code>个字节的数据，并把它们放到数据区<code>buf</code>中。返回实际读入的字节数。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">size_t</span> <span class="title">read</span><span class="params">(<span class="keyword">int</span> fildes, <span class="keyword">void</span> *buf, <span class="keyword">size_t</span> nbytes)</span></span>;</span><br></pre></td></tr></table></figure>
+<p>下面的程序把标准输入的前128个字符复制到标准输出。如果输入少于128个字节，就把它们全体复制过去。</p>
+<script src="https://gist.github.com/afawa/b47c490b523f9f6874528b40d16a00e7.js"></script>
+
+<p>运行这个程序可以看到</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">$ <span class="built_in">echo</span> <span class="string">&quot;Hello World&quot;</span> | ./simple_read</span><br><span class="line">Hello World</span><br><span class="line">$ ./simple_read</span><br><span class="line"><span class="built_in">read</span> from stdin</span><br><span class="line"><span class="built_in">read</span> from stdin</span><br><span class="line">$ </span><br></pre></td></tr></table></figure>
+<h3 id="open系统调用"><a href="#open系统调用" class="headerlink" title="open系统调用"></a><code>open</code>系统调用</h3><p>为了创建一个新的文件描述符，需要使用系统调用<code>open</code></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;fcntl.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/types.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/stat.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">open</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *path, <span class="keyword">int</span> oflags)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">open</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *path, <span class="keyword">int</span> oflags, <span class="keyword">mode_t</span> mode)</span></span>;</span><br></pre></td></tr></table></figure>
+<p>如果<code>open</code>调用成功，会返回一个可以被读写和使用的文件描述符。这个文件描述符数唯一的，不会和任何其他进程共享。如果两个进程打开同一个文件，那么两个进程会分别维护一个指针来代表当前读（写）操作应该从哪里开始，所有如果同时对于一个文件进行写操作，会相互覆盖。</p>
+<p>准备打开的文件或设备的名字作为<code>path</code>传递给函数，<code>oflags</code>参数用于指定打开文件所采取的动作。下面是一些<code>oflags</code>。如果使用多个<code>o_flags</code>使用<code>|</code>进行连接。</p>
+<table>
+<thead>
+<tr>
+<th align="center">模式</th>
+<th align="center">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center"><code>O_RDONLY</code></td>
+<td align="center">只读</td>
+</tr>
+<tr>
+<td align="center"><code>O_WRONLY</code></td>
+<td align="center">只写</td>
+</tr>
+<tr>
+<td align="center"><code>O_RDWR</code></td>
+<td align="center">读写</td>
+</tr>
+<tr>
+<td align="center"><code>O_APPEND</code></td>
+<td align="center">写入时追加在文件末尾</td>
+</tr>
+<tr>
+<td align="center"><code>O_TRUNC</code></td>
+<td align="center">丢弃文件已有的内容</td>
+</tr>
+<tr>
+<td align="center"><code>O_CREAT</code></td>
+<td align="center">如果需要，就按参数<code>mode</code>中的访问模式创建文件</td>
+</tr>
+<tr>
+<td align="center"><code>O_EXCL</code></td>
+<td align="center">与<code>O_CREAT</code>一起使用，确保调用者创建出文件</td>
+</tr>
+</tbody></table>
+<p><code>open</code>如果调用成功就返回一个文件描述符，如果调用失败就返回-1，新的文件描述符总是使用未用描述符的最小值。</p>
+<p>任何一个运行中的程序能够同时打开的文件数时有限制的。这个限制通常是由<code>limits.h</code>头文件中的常量<code>OPEN_MAX</code>定义的，它的值随系统的不同而不同，但是POSIX要求至少16（同时受本地系统全局性限制的影响）。这个限制可以在运行时调整，所有<code>OPEN_MAX</code>不是一个常量。</p>
+<h4 id="访问权限的初始值"><a href="#访问权限的初始值" class="headerlink" title="访问权限的初始值"></a>访问权限的初始值</h4><p>当使用带有<code>O_CREAT</code>的<code>open</code>调用来创建文件时，必须使用有3个参数格式的<code>open</code>调用。第三个参数<code>mode</code>时几个标志按位或后得到的，这些标志再头文件<code>sys/stat.h</code>中定义：</p>
+<ol>
+<li><code>S_IRUSR</code>，<code>S_IWUSR</code>，<code>S_IXUSR</code>。属主读写执行。</li>
+<li><code>S_IRGRP</code>，<code>S_IWGRP</code>，<code>S_IXGRP</code>。属组读写执行。</li>
+<li><code>S_IROTH</code>，<code>S_IWOTH</code>，<code>S_IXOTH</code>。其他用户读写执行。</li>
+</ol>
+<p>下面是一个例子</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">open(<span class="string">&quot;myfile&quot;</span>, O_CREAT, S_IRUSR|S_IXOTH);</span><br></pre></td></tr></table></figure>
+<p>它创建了一个名为<code>myfile</code>的文件，文件属主有读权限，其他用户有执行权限。</p>
+<p>有几个因素会对文件的访问权限产生影响。</p>
+<ol>
+<li>指定的访问权限只有在创建文件时才会使用。</li>
+<li>用户掩码（<code>umask</code>命令查看），简单来说，<code>open</code>调用里面的<code>mode</code>值会与当前用户掩码的反值做<code>&amp;</code>操作。</li>
+</ol>
+<h3 id="close系统调用"><a href="#close系统调用" class="headerlink" title="close系统调用"></a><code>close</code>系统调用</h3><p>使用<code>close</code>调用终止文件描述符与其对应文件之间的关联。文件描述符被释放并且能够被重新使用。<code>close</code>调用成功时返回0，出错时返回-1。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">close</span><span class="params">(<span class="keyword">int</span> fildes)</span></span>;</span><br></pre></td></tr></table></figure>
+<p>注意在编程时检查<code>close</code>的返回值。</p>
+<h3 id="ioctl系统调用"><a href="#ioctl系统调用" class="headerlink" title="ioctl系统调用"></a><code>ioctl</code>系统调用</h3><p><code>ioctl</code>提供了一个用于控制设备及其描述符行为和配置底层服务的接口。终端、文件描述符、套接字甚至磁带机都可以有为它们定义的<code>ioctl</code>。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">ioctl</span><span class="params">(<span class="keyword">int</span> fildes, <span class="keyword">int</span> cmd, ...)</span></span>;</span><br></pre></td></tr></table></figure>
+<p>（不做讨论了）</p>
+<h3 id="使用系统调用进行文件复制"><a href="#使用系统调用进行文件复制" class="headerlink" title="使用系统调用进行文件复制"></a>使用系统调用进行文件复制</h3><p>下面是一个简单的文件复制程序</p>
+<script src="https://gist.github.com/afawa/932760eab749cca7fdca7b3f0155bc27.js"></script>
+
+<p>这个程序每次读入一个字节，实现文件的复制，因为系统调用本身开销很大，所以可以用如下方式进行优化。</p>
+<script src="https://gist.github.com/afawa/54924b2fce731668fb807f6d8d4bbd82.js"></script>
+
+<p>这里需要注意一点，<code>#include &lt;unistd.h&gt;</code>行必须首先出现，因为它定义的与POSIX规范有关的标志可能会影响到其他头文件。</p>
+<h3 id="其他系统调用"><a href="#其他系统调用" class="headerlink" title="其他系统调用"></a>其他系统调用</h3><h4 id="lseek系统调用"><a href="#lseek系统调用" class="headerlink" title="lseek系统调用"></a><code>lseek</code>系统调用</h4><p><code>lseek</code>系统调用对文件描述符<code>fildes</code>的读写指针进行设置。读写指针可被设置为文件的绝对位置，也可以被设置为相对于当前位置或文件尾的某个相对位置。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/type.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">off_t</span> <span class="title">lseek</span><span class="params">(<span class="keyword">int</span> fildes, <span class="keyword">off_t</span> offset, <span class="keyword">int</span> whence)</span></span>;</span><br></pre></td></tr></table></figure>
+<p>其中<code>whence</code>参数定义该偏移值的用法。<code>whence</code>可以取下列值之一。</p>
+<ol>
+<li><code>SEEK_SET</code>：<code>offset</code>参数指定的是一个绝对位置</li>
+<li><code>SEEK_CUR</code>：<code>offset</code>参数是相对于当前位置的一个位置</li>
+<li><code>SEEK_END</code>：<code>offset</code>是相对于文件尾的一个位置</li>
+</ol>
+<p><code>lseek</code>返回从文件头到文件指针被设置处的字节偏移值，失败时返回-1。参数<code>offset</code>的类型<code>off_t</code>与具体实现有关，定义在<code>sys/types.h</code>中。</p>
+<h4 id="fstat，stat，lstat系统调用"><a href="#fstat，stat，lstat系统调用" class="headerlink" title="fstat，stat，lstat系统调用"></a><code>fstat</code>，<code>stat</code>，<code>lstat</code>系统调用</h4><p><code>fstat</code>系统调用返回与打开文件描述符相关的文件的状态信息，该信息将会写到一个buf结构体中。<code>stat</code>和<code>lstat</code>会通过文件名查到对应的状态信息。如果文件是一个符号链接，<code>lstat</code>返回这个符号链接本身的信息，<code>stat</code>返回链接指向的文件的信息。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/stat.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/types.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">fstat</span><span class="params">(<span class="keyword">int</span> fildes, struct stat *buf)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">stat</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *path, struct stat *buf)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">lstat</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *path, struct stat *buf)</span></span>;</span><br></pre></td></tr></table></figure>
+<p><code>stat</code>结构的成员在不同类UNIX系统上会有所变化，但一般会包括下面的内容</p>
+<table>
+<thead>
+<tr>
+<th align="center">stat成员</th>
+<th align="center">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center"><code>st_mode</code></td>
+<td align="center">文件权限和文件类型信息</td>
+</tr>
+<tr>
+<td align="center"><code>st_ino</code></td>
+<td align="center">与该文件关联的inode</td>
+</tr>
+<tr>
+<td align="center"><code>st_dev</code></td>
+<td align="center">保存文件的设备</td>
+</tr>
+<tr>
+<td align="center"><code>st_uid</code></td>
+<td align="center">文件属主的UID号</td>
+</tr>
+<tr>
+<td align="center"><code>st_gid</code></td>
+<td align="center">文件属主的GID号</td>
+</tr>
+<tr>
+<td align="center"><code>st_atime</code></td>
+<td align="center">文件上一次被访问的时间</td>
+</tr>
+<tr>
+<td align="center"><code>st_ctime</code></td>
+<td align="center">文件的权限、属主、组或内容上一次被改变的时间</td>
+</tr>
+<tr>
+<td align="center"><code>st_mtime</code></td>
+<td align="center">文件的内容上一次被修改的时间</td>
+</tr>
+<tr>
+<td align="center"><code>st_nlink</code></td>
+<td align="center">该文件上硬链接的个数</td>
+</tr>
+</tbody></table>
+<h4 id="dup和dup2系统调用"><a href="#dup和dup2系统调用" class="headerlink" title="dup和dup2系统调用"></a><code>dup</code>和<code>dup2</code>系统调用</h4><p><code>dup</code>系统调用提供了一种复制文件描述符的方法，使得多个描述符描述同一个文件。<code>dup</code>复制文件描述符<code>fildes</code>，返回一个新的描述符。<code>dup2</code>则是把一个文件描述符复制为一个新的文件描述符，如果指定的新文件描述符已经被打开了，那么就先关闭之前的文件描述符，要注意在<code>dup2</code>中关闭和打开这个操作是原子的。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">dup</span><span class="params">(<span class="keyword">int</span> fildes)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">dup2</span><span class="params">(<span class="keyword">int</span> fildes, <span class="keyword">int</span> fildes2)</span></span>;</span><br></pre></td></tr></table></figure>
+<h2 id="标准I-O库"><a href="#标准I-O库" class="headerlink" title="标准I/O库"></a>标准I/O库</h2><p>在标准I/O库中，与底层文件描述符对应的是流，它被实现为指向结构<code>FILE</code>的指针。</p>
+<p>在启动程序时，有三个文件流是自动打开的，<code>stdin</code>，<code>stdout</code>，<code>stderr</code>。</p>
+<h3 id="fopen函数"><a href="#fopen函数" class="headerlink" title="fopen函数"></a>fopen函数</h3><p><code>fopen</code>库函数类似于<code>open</code>系统调用。如果需要对应设备进行明确的控制，最后使用<code>open</code>系统调用，因为这可以避免用库函数带来的一些潜在问题，如输入/输出缓冲。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function">FILE *<span class="title">fopen</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *filename, <span class="keyword">const</span> <span class="keyword">char</span> *mode)</span></span>;</span><br></pre></td></tr></table></figure>
+<p><code>mode</code>参数指定文件的打开方式，</p>
+<ol>
+<li>“r”或者”rb”，只读。文件必须存在，否则打开失败。</li>
+<li>“w”或者”wb”，写方式打开，把文件长度截断为0（或者创建空文件）</li>
+<li>“a”或者”ab”，写方式打开，把新内容追加在文件尾（或者创建空文件）</li>
+<li>“r+”或者”rb+”，以“读写”方式打开文件。既可以读取也可以写入，也就是随意更新文件。文件必须存在，否则打开失败。</li>
+<li>“w+”或者”wb+”，以“写入/更新”方式打开文件，相当于w和r+叠加的效果。既可以读取也可以写入，也就是随意更新文件。如果文件不存在，那么创建一个新文件；如果文件存在，那么清空文件内容（相当于删除原文件，再创建一个新文件）。</li>
+<li>“a+”或者”ab+”，以“追加/更新”方式打开文件，相当于a和r+叠加的效果。既可以读取也可以写入，也就是随意更新文件。如果文件不存在，那么创建一个新文件；如果文件存在，那么将写入的数据追加到文件的末尾（文件原有的内容保留）。</li>
+</ol>
+<p>这里的”b”代表打开的是二进制文件。</p>
+<p><code>fopen</code>在成功时返回一个非空的<code>FILE *</code>指针，失败时返回<code>NULL</code>，<code>NULL</code>在<code>stdio.h</code>中被定义。</p>
+<p>可用的文件流数量和文件描述符的数量一样都是有数量限制的。实际的限制是由头文件<code>stdio.h</code>中定义的<code>FOPEN_MAX</code>定义的，它的值至少是8。</p>
+<h3 id="fread函数"><a href="#fread函数" class="headerlink" title="fread函数"></a><code>fread</code>函数</h3><p><code>fread</code>函数用于从一个文件流里读取数据。数据从文件流<code>stream</code>读到<code>ptr</code>指向的数据缓冲区中，<code>size</code>参数指定一次读取的数据记录的长度，<code>nitems</code>指定要传输的记录的个数。返回值是成功读入的记录的数目。在<code>fread</code>中并没有区分发生错误和读完流，所以两种发生时返回值都是一个小于<code>nitems</code>的数，需要使用<code>feof</code>和<code>ferror</code>来判断是否有错误发生。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">size_t</span> <span class="title">fread</span><span class="params">(<span class="keyword">void</span> *ptr, <span class="keyword">size_t</span> size, <span class="keyword">size_t</span> nitems, FILE *stream)</span></span>;</span><br></pre></td></tr></table></figure>
+<h3 id="fwrite函数"><a href="#fwrite函数" class="headerlink" title="fwrite函数"></a><code>fwrite</code>函数</h3><p>与<code>fread</code>函数几乎完全一致</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">size_t</span> <span class="title">fwrite</span><span class="params">(<span class="keyword">void</span> *ptr, <span class="keyword">size_t</span> size, <span class="keyword">size_t</span> nitems, FILE *stream)</span></span>;</span><br></pre></td></tr></table></figure>
+<h3 id="fclose函数"><a href="#fclose函数" class="headerlink" title="fclose函数"></a><code>fclose</code>函数</h3><p><code>fclose</code>关闭指定文件流<code>stream</code>，使所有尚未写出的数据都写出。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">fclose</span><span class="params">(FILE *stream)</span></span>;</span><br></pre></td></tr></table></figure>
+<h3 id="fflush函数"><a href="#fflush函数" class="headerlink" title="fflush函数"></a><code>fflush</code>函数</h3><p><code>fflush</code>库函数的作用是把文件流里的尚未写出的数据立刻写出。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">fflush</span><span class="params">(FILE *stream)</span></span>;</span><br></pre></td></tr></table></figure>
+<h3 id="fseek函数"><a href="#fseek函数" class="headerlink" title="fseek函数"></a><code>fseek</code>函数</h3><p><code>fseek</code>和<code>lseek</code>对应，其中的<code>offset</code>参数和<code>whence</code>参数完全一致，区别是<code>lseek</code>返回一个<code>off_t</code>数值，<code>fssek</code>返回一个整数：0表示成功，-1表示失败。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">fseek</span><span class="params">(FILE *stream, <span class="keyword">long</span> <span class="keyword">int</span> offset, <span class="keyword">int</span> whence)</span></span>;</span><br></pre></td></tr></table></figure>
+<h3 id="fgetc，getc，getchar函数"><a href="#fgetc，getc，getchar函数" class="headerlink" title="fgetc，getc，getchar函数"></a><code>fgetc</code>，<code>getc</code>，<code>getchar</code>函数</h3><p><code>fgetc</code>函数从流中读出下一个字符返回如果到文件尾或者遇到错误则返回<code>EOF</code>（-1）,需要使用<code>feof</code>和<code>ferror</code>进行区分。<code>getc</code>的作用和<code>fgetc</code>一致，但是<code>getc</code>有可能被作为一个宏实现。<code>getchar</code>的相当于<code>getc(stdin)</code>。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">fgetc</span><span class="params">(FILE *stream)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">getc</span><span class="params">(FILE *stream)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">getchar</span><span class="params">()</span></span>;</span><br></pre></td></tr></table></figure>
+<p>下面是一个使用标志输入输出库实现的复制程序。</p>
+<script src="https://gist.github.com/afawa/87cd2e75a5849aa1901c78f50a850ab5.js"></script>
+
+<h3 id="fputc，putc，putchar函数"><a href="#fputc，putc，putchar函数" class="headerlink" title="fputc，putc，putchar函数"></a><code>fputc</code>，<code>putc</code>，<code>putchar</code>函数</h3><p>这三个函数都是写入一个字符，具体差距见上面</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">fputc</span><span class="params">(<span class="keyword">int</span> c, FILE *stream)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">putc</span><span class="params">(<span class="keyword">int</span> c, FILE *stream)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">putchar</span><span class="params">(<span class="keyword">int</span> c)</span></span>;</span><br></pre></td></tr></table></figure>
+<h3 id="fgets，gets函数"><a href="#fgets，gets函数" class="headerlink" title="fgets，gets函数"></a><code>fgets</code>，<code>gets</code>函数</h3><p>这两个函数从流中读取字符串</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">char</span> *<span class="title">fgets</span><span class="params">(<span class="keyword">char</span> *s, <span class="keyword">int</span> n, FILE *stream)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">char</span> *<span class="title">gets</span><span class="params">(<span class="keyword">char</span> *s)</span></span>;</span><br></pre></td></tr></table></figure>
+<p><code>fgets</code>函数把读到的数据写入<code>s</code>中，直到遇到下面出现的其中一种情况：</p>
+<ol>
+<li>遇到换行符</li>
+<li>已经读取了n-1个字符</li>
+<li>到达文件尾</li>
+</ol>
+<p>它会把换行符也写入到<code>s</code>中，同时<code>fgets</code>会加上一个表示结尾的空字节<code>\0</code>表示结束所以一次调用只能最多读取n-1个字符。调用成功时，<code>fgets</code>返回一个指向<code>s</code>的指针。如果遇到<code>EOF</code>或者错误则会返回<code>NULL</code>空指针。</p>
+<p><code>gets</code>函数类似<code>fgets</code>，但是只会读<code>stdin</code>，并且只会遇到换行符停止，并且在写入<code>s</code>时会抛弃最后的换行符，并且<code>gets</code>很有可能导致缓冲区溢出（少用）</p>
+<h3 id="格式化输入输出"><a href="#格式化输入输出" class="headerlink" title="格式化输入输出"></a>格式化输入输出</h3><h4 id="printf，fprintf，sprintf函数"><a href="#printf，fprintf，sprintf函数" class="headerlink" title="printf，fprintf，sprintf函数"></a><code>printf</code>，<code>fprintf</code>，<code>sprintf</code>函数</h4><p>函数原型</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">printf</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *format, ...)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">sprintf</span><span class="params">(<span class="keyword">char</span> *s, <span class="keyword">const</span> <span class="keyword">char</span> *format, ...)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">fprintf</span><span class="params">(FILE *stream, <span class="keyword">const</span> <span class="keyword">char</span> *format, ...)</span></span>;</span><br></pre></td></tr></table></figure>
+<p><code>printf</code>函数输出到<code>stdout</code>，<code>fprintf</code>函数输出到指定的文件流，<code>sprintf</code>函数把自己的输出和一个结尾空字符写入字符串中。其他的<code>printf</code>系列函数可以在<code>man 3 printf</code>中查看。</p>
+<p>普通字符在输出时不发生变化。转换控制符让<code>printf</code>取出传递过来的其他参数并对它们的格式进行编排。转换控制符总是以<code>%</code>开头。下面是一些常用的转换控制符。</p>
+<ol>
+<li><code>%d</code>，<code>%i</code>。十进制输出整数</li>
+<li><code>%o</code>。八进制输出</li>
+<li><code>%x</code>。十六进制输出</li>
+<li><code>%c</code>。输出一个字符</li>
+<li><code>%s</code>。输出一个字符串</li>
+<li><code>%f</code>。输出一个单精度浮点数</li>
+<li><code>%e</code>。科学计数法输出一个双精度浮点数</li>
+<li><code>%g</code>。以通用格式输出一个双精度浮点数</li>
+</ol>
+<p><code>printf</code>函数返回一个整数表示其输出的字符的个数，但是<code>sprintf</code>函数并没有把最后的<code>\0</code>计算在内。</p>
+<h4 id="scanf，fscanf，sscanf函数"><a href="#scanf，fscanf，sscanf函数" class="headerlink" title="scanf，fscanf，sscanf函数"></a><code>scanf</code>，<code>fscanf</code>，<code>sscanf</code>函数</h4><p>函数原型</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">scanf</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *format, ...)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">fscanf</span><span class="params">(FILE *stream, <span class="keyword">const</span> <span class="keyword">char</span> *format, ...)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">sscanf</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *s, <span class="keyword">const</span> <span class="keyword">char</span> *format, ...)</span></span>;</span><br></pre></td></tr></table></figure>
+<p><code>scanf</code>系列函数和<code>printf</code>相反，是读取数据到变量中，这些变量的类型必须正确，并且它们必须精确匹配格式字符串，否则内存就会被破坏。（编译器并不会报错）</p>
+<p>使用<code>%[]</code>控制符读取由一个字符串集合中的字符构成的字符串。格式字符串<code>%[A-Z]</code>将读取一个由大写字母构成的字符串。如果想要读取一个带空格的字符串，并且在换行符处停止，可以使用<code>%[^\n]</code>来进行读取。</p>
+<p><code>scanf</code>函数的返回值是它成功读取的数据项的个数，如果在读取第一个数据项时失败了，返回0，如果达到了输入的结尾，就会返回<code>EOF</code>。如果文件流发生读错误，流错误标志就会被设置并且错误变量<code>errno</code>将被设置以指明错误类型。</p>
+<h3 id="其他流函数"><a href="#其他流函数" class="headerlink" title="其他流函数"></a>其他流函数</h3><ol>
+<li><code>fgetpos</code>：获取文件流的当前（读写）位置</li>
+<li><code>fsetpos</code>：设置文件流的当前（读写）位置</li>
+<li><code>ftell</code>：返回文件流当前（读写）位置的偏移值</li>
+<li><code>rewind</code>：重置文件流内的读写位置</li>
+<li><code>freopen</code>：重新使用一个文件流</li>
+<li><code>setvbuf</code>：设置文件流的缓冲机制</li>
+<li><code>remove</code>：相当于<code>unlink</code>函数，如果<code>path</code>参数是一个目录的话，其作用就相当于<code>rmdir</code>函数</li>
+</ol>
+<h3 id="文件流错误"><a href="#文件流错误" class="headerlink" title="文件流错误"></a>文件流错误</h3><p>为了表明错误，许多库函数会返回一个超出范围的值，例如控制针和<code>EOF</code>。此时，错误由外部变量<code>errno</code>指出。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;error.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">extern</span> <span class="keyword">int</span> errno;</span><br></pre></td></tr></table></figure>
+<p>注意，许多函数都可能改变<code>errno</code>的值，它的值只有在函数调用失败之后才有意义。在函数使用失败后必须立刻对其进行检查。</p>
+<p>也可以通过检查文件流的状态来确定是否发生了错误，或者是否到达了文件尾。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">ferror</span><span class="params">(FILE *stream)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">feof</span><span class="params">(FILE *stream)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">clearerr</span><span class="params">(FILE *stream)</span></span>;</span><br></pre></td></tr></table></figure>
+<p><code>ferror</code>函数测试一个文件流的错误标识，如果该标识被设置就返回一个非0值，否则返回0。</p>
+<p><code>feof</code>函数测试一个文件流的文件尾标识，如果该标识被设置就返回一个非0值，否则返回0。</p>
+<p><code>clearerr</code>函数的作用是清除由<code>stream</code>指向文件流的文件尾标识和错误标识。可以通过使用这个函数从文件流的错误中恢复。</p>
+<h3 id="文件流和文件描述符"><a href="#文件流和文件描述符" class="headerlink" title="文件流和文件描述符"></a>文件流和文件描述符</h3><p>每个文件流都和一个底层文件描述符相关联。可以把底层的输入输出操作和高层的文件流操作混合使用，一般来说这不是一个明智的做法，因为数据缓冲的后果难以预料。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">fileno</span><span class="params">(FILE *stream)</span></span>;</span><br><span class="line"><span class="function">FILE *<span class="title">fdopen</span><span class="params">(<span class="keyword">int</span> fildes, <span class="keyword">const</span> <span class="keyword">char</span> *mode)</span></span>;</span><br></pre></td></tr></table></figure>
+<p><code>fileno</code>函数可以确定文件流使用的文件描述符，如果失败就返回-1，如果需要对一个已经打开的文件流进行底层访问，这个函数很有用。<code>fdopen</code>在一个已经打开的文件描述符上创建一个新的文件流，事实上这个函数的作用是提供一个缓冲区。</p>
+<h2 id="文件和目录的维护"><a href="#文件和目录的维护" class="headerlink" title="文件和目录的维护"></a>文件和目录的维护</h2><h3 id="chmod系统调用"><a href="#chmod系统调用" class="headerlink" title="chmod系统调用"></a><code>chmod</code>系统调用</h3><p>可以通过<code>chmod</code>系统调用来改变文件或目录的访问权限。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/stat.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">chmod</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *path, <span class="keyword">mode_t</span> mode)</span></span>;</span><br></pre></td></tr></table></figure>
+<p><code>path</code>参数指定的文件被修改为具有<code>mode</code>参数给出的访问权限。</p>
+<h3 id="chown系统调用"><a href="#chown系统调用" class="headerlink" title="chown系统调用"></a><code>chown</code>系统调用</h3><p>超级用户可以使用<code>chown</code>系统调用来改变文件的属主</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/type.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">chown</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *path, <span class="keyword">uid_t</span> owner, <span class="keyword">gid_t</span> group)</span></span>;</span><br></pre></td></tr></table></figure>
+<h3 id="unlink，link，syslink系统调用"><a href="#unlink，link，syslink系统调用" class="headerlink" title="unlink，link，syslink系统调用"></a><code>unlink</code>，<code>link</code>，<code>syslink</code>系统调用</h3><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">unlink</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *path)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">link</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *path1, <span class="keyword">const</span> <span class="keyword">char</span> *path2)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">syslink</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *path1, <span class="keyword">const</span> <span class="keyword">char</span> *path2)</span></span>;</span><br></pre></td></tr></table></figure>
+<p><code>unlink</code>系统调用删除一个文件的目录项并减少它的（硬）链接数。在成功时返回0，失败时返回-1。如果一个文件的链接数减少到0，并且没有进程打开它，这个文件就会被删除。<code>link</code>系统调用将创建一个指向已有文件<code>path1</code>的新链接，使用<code>syslink</code>创建符号链接。</p>
+<h3 id="mkdir和rmdir系统调用"><a href="#mkdir和rmdir系统调用" class="headerlink" title="mkdir和rmdir系统调用"></a><code>mkdir</code>和<code>rmdir</code>系统调用</h3><p>类比shell中的<code>mkdir</code>和<code>rmdir</code>程序</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/types.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys.stat.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">mkdir</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *path, <span class="keyword">mode_t</span> mode)</span></span>;</span><br></pre></td></tr></table></figure>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">rmdir</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *path)</span></span>;</span><br></pre></td></tr></table></figure>
+<h3 id="chdir系统调用和getcwd函数"><a href="#chdir系统调用和getcwd函数" class="headerlink" title="chdir系统调用和getcwd函数"></a><code>chdir</code>系统调用和<code>getcwd</code>函数</h3><p><code>chdir</code>系统调用可以用来切换目录（相当于<code>cd</code>）</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">chdir</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *path)</span></span>;</span><br></pre></td></tr></table></figure>
+<p><code>getcwd</code>函数用来确定当前的工作目录</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">char</span> *<span class="title">getcwd</span><span class="params">(<span class="keyword">char</span> *buf, <span class="keyword">size_t</span> size)</span></span>;</span><br></pre></td></tr></table></figure>
+<p><code>getcwd</code>函数把当前目录的名字写到给定的缓冲区<code>buf</code>里。如果目录名的长度超出了参数<code>size</code>给出的缓冲区长度，就会返回<code>NULL</code>，如果成功，返回指针<code>buf</code>。</p>
+<h2 id="扫描目录"><a href="#扫描目录" class="headerlink" title="扫描目录"></a>扫描目录</h2><p>之前提到目录本身是一种特殊的文件，与目录操作相关的函数在<code>dirent.h</code>头文件中声明。</p>
+<h3 id="opendir函数"><a href="#opendir函数" class="headerlink" title="opendir函数"></a><code>opendir</code>函数</h3><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/types.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;dirent.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function">DIR *<span class="title">opendir</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *name)</span></span>;</span><br></pre></td></tr></table></figure>
+<p><code>opendir</code>函数打开一个目录并且建立一个目录流。如果成功返回一个指向<code>DIR</code>结构的指针，如果失败返回一个空指针。注意，目录流使用一个底层的文件描述符来访问目录本身，如果打开文件过多，<code>opendir</code>可能失败。</p>
+<h3 id="readdir函数"><a href="#readdir函数" class="headerlink" title="readdir函数"></a><code>readdir</code>函数</h3><p><code>readdir</code>函数返回一个指针，该指针指向的结构里保存着目录流<code>dirp</code>中下一个目录项的有关资料。后续的<code>readdir</code>调用将会返回后续的目录项。如果发生错误或者到达目录尾，则返回<code>NULL</code>。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/types.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;dirent.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function">struct dirent *<span class="title">readdir</span><span class="params">(DIR *dirp)</span></span>;</span><br></pre></td></tr></table></figure>
+<p><code>dirent</code>结构中包含的目录项内容包括以下部分：</p>
+<ol>
+<li><code>ino_t d_ino</code>：文件的<code>inode</code>节点号</li>
+<li><code>char d_name[]</code>：文件的名字</li>
+</ol>
+<h3 id="telldir，seekdir函数"><a href="#telldir，seekdir函数" class="headerlink" title="telldir，seekdir函数"></a><code>telldir</code>，<code>seekdir</code>函数</h3><p><code>telldir</code>函数的返回值记录一个目录流的当前位置，<code>seekdir</code>函数的作用是设置目录流的目录项指针。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/types.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;dirent.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">long</span> <span class="keyword">int</span> <span class="title">telldir</span><span class="params">(DIR *dirp)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">seekdir</span><span class="params">(DIR *dirp, <span class="keyword">long</span> <span class="keyword">int</span> inc)</span></span>;</span><br></pre></td></tr></table></figure>
+<h3 id="closedir函数"><a href="#closedir函数" class="headerlink" title="closedir函数"></a><code>closedir</code>函数</h3><p><code>closedir</code>函数关闭一个目录流并释放资源。在执行成功时返回0，发生错误时返回-1。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/types.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;dirent.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">closedir</span><span class="params">(DIR *dirp)</span></span>;</span><br></pre></td></tr></table></figure>
+<p>下面是一个目录扫描程序</p>
+<script src="https://gist.github.com/afawa/db8b061b19cda5dde96e307754813b23.js"></script>
+
+<h2 id="错误处理"><a href="#错误处理" class="headerlink" title="错误处理"></a>错误处理</h2><p>错误代码的取值和含义都在头文件<code>error.h</code>里。有两个非常有用的函数可以用来报告出现的错误。</p>
+<h3 id="strerror函数"><a href="#strerror函数" class="headerlink" title="strerror函数"></a><code>strerror</code>函数</h3><p><code>strerror</code>函数把错误代码映射成一个字符串，该字符串对发生的错误类型进行说明。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">char</span> *<span class="title">strerror</span><span class="params">(<span class="keyword">int</span> errnum)</span></span>;</span><br></pre></td></tr></table></figure>
+<h3 id="perror函数"><a href="#perror函数" class="headerlink" title="perror函数"></a><code>perror</code>函数</h3><p><code>perror</code>函数把<code>errno</code>变量中报告的错误映射到一个字符串，并输出到<code>stderr</code>中。该字符串前加上<code>s</code>中给出的信息，再加上一个冒号和一个空格。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">perror</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *s)</span></span>;</span><br></pre></td></tr></table></figure>
+<h2 id="proc文件系统"><a href="#proc文件系统" class="headerlink" title="/proc文件系统"></a><code>/proc</code>文件系统</h2><p>Linux提供了一个特殊的文件系统<code>procfs</code>，它通常以<code>/proc</code>目录的形式呈现。该目录中包含了许多特殊文件用来对驱动程序和内核信息进行更高层的访问。</p>
+<ol>
+<li><code>/proc/cpuinfo</code>给出cpu的详细信息</li>
+<li><code>/proc/meminfor</code>给出内存使用情况</li>
+<li><code>/proc/version</code>给出内核版本情况</li>
+<li><code>/proc/net/sockstat</code>给出网络套接字的使用情况</li>
+<li><code>/proc/sys/fs/file-max</code>给出运行的程序同时能打开的文件总数。可以对其进行修改</li>
+</ol>
+</div><div class="article-licensing box"><div class="licensing-title"><p>linux 文件操作</p><p><a href="https://afawa.github.io/2021/01/28/linux-文件操作/">https://afawa.github.io/2021/01/28/linux-文件操作/</a></p></div><div class="licensing-meta level is-mobile"><div class="level-left"><div class="level-item is-narrow"><div><h6>Author</h6><p>Yiming He</p></div></div><div class="level-item is-narrow"><div><h6>Posted on</h6><p>2021-01-28</p></div></div><div class="level-item is-narrow"><div><h6>Updated on</h6><p>2021-02-02</p></div></div><div class="level-item is-narrow"><div><h6>Licensed under</h6><p><a class="icon" rel="noopener" target="_blank" title="Creative Commons" href="https://creativecommons.org/"><i class="fab fa-creative-commons"></i></a><a class="icon" rel="noopener" target="_blank" title="Attribution" href="https://creativecommons.org/licenses/by/4.0/"><i class="fab fa-creative-commons-by"></i></a><a class="icon" rel="noopener" target="_blank" title="Noncommercial" href="https://creativecommons.org/licenses/by-nc/4.0/"><i class="fab fa-creative-commons-nc"></i></a></p></div></div></div></div></div><div class="article-tags is-size-7 mb-4"><span class="mr-2">#</span><a class="link-muted mr-2" rel="tag" href="/tags/linux-programming/">linux programming</a></div><div class="sharethis-inline-share-buttons"></div><script src="https://platform-api.sharethis.com/js/sharethis.js#property=5ff82d83d7d501001255ad9d&amp;product=sticky-share-buttons" defer></script></article></div><!--!--><nav class="post-navigation mt-4 level is-mobile"><div class="level-end"><a class="article-nav-next level level-item link-muted" href="/2021/01/21/sed-gawk%E8%BF%9B%E9%98%B6/"><span class="level-item">sed,gawk进阶</span><i class="level-item fas fa-chevron-right"></i></a></div></nav><div class="card"><div class="card-content"><h3 class="title is-5">Comments</h3><div id="comment-container"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1.6.2/dist/gitalk.css"><script src="https://cdn.jsdelivr.net/npm/gitalk@1.6.2/dist/gitalk.min.js"></script><script>var gitalk = new Gitalk({
+            id: "78938da1707370427fcab97efcef9f53",
+            repo: "afawa.github.io",
+            owner: "afawa",
+            clientID: "ad49fd64876339d5ddc6",
+            clientSecret: "c34cd6c177e1310c81d20ff9b5efea8c05b1a546",
+            admin: ["afawa"],
+            createIssueManually: false,
+            distractionFreeMode: false,
+            perPage: 10,
+            pagerDirection: "last",
+            
+            
+            enableHotKey: true,
+            
+        })
+        gitalk.render('comment-container')</script></div></div></div><div class="column column-left is-4-tablet is-4-desktop is-4-widescreen  order-1 is-sticky"><div class="card widget" id="toc" data-type="toc"><div class="card-content"><div class="menu"><h3 class="menu-label">Catalogue</h3><ul class="menu-list"><li><a class="level is-mobile" href="#linux-文件操作"><span class="level-left"><span class="level-item">1</span><span class="level-item">linux 文件操作</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#linux-文件结构"><span class="level-left"><span class="level-item">1.1</span><span class="level-item">linux 文件结构</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#目录"><span class="level-left"><span class="level-item">1.1.1</span><span class="level-item">目录</span></span></a></li><li><a class="level is-mobile" href="#文件和设备"><span class="level-left"><span class="level-item">1.1.2</span><span class="level-item">文件和设备</span></span></a></li></ul></li><li><a class="level is-mobile" href="#系统调用和设备驱动程序"><span class="level-left"><span class="level-item">1.2</span><span class="level-item">系统调用和设备驱动程序</span></span></a></li><li><a class="level is-mobile" href="#库函数"><span class="level-left"><span class="level-item">1.3</span><span class="level-item">库函数</span></span></a></li><li><a class="level is-mobile" href="#底层文件访问"><span class="level-left"><span class="level-item">1.4</span><span class="level-item">底层文件访问</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#write系统调用"><span class="level-left"><span class="level-item">1.4.1</span><span class="level-item">write系统调用</span></span></a></li><li><a class="level is-mobile" href="#read系统调用"><span class="level-left"><span class="level-item">1.4.2</span><span class="level-item">read系统调用</span></span></a></li><li><a class="level is-mobile" href="#open系统调用"><span class="level-left"><span class="level-item">1.4.3</span><span class="level-item">open系统调用</span></span></a></li><li><a class="level is-mobile" href="#close系统调用"><span class="level-left"><span class="level-item">1.4.4</span><span class="level-item">close系统调用</span></span></a></li><li><a class="level is-mobile" href="#ioctl系统调用"><span class="level-left"><span class="level-item">1.4.5</span><span class="level-item">ioctl系统调用</span></span></a></li><li><a class="level is-mobile" href="#使用系统调用进行文件复制"><span class="level-left"><span class="level-item">1.4.6</span><span class="level-item">使用系统调用进行文件复制</span></span></a></li><li><a class="level is-mobile" href="#其他系统调用"><span class="level-left"><span class="level-item">1.4.7</span><span class="level-item">其他系统调用</span></span></a></li></ul></li><li><a class="level is-mobile" href="#标准I-O库"><span class="level-left"><span class="level-item">1.5</span><span class="level-item">标准I/O库</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#fopen函数"><span class="level-left"><span class="level-item">1.5.1</span><span class="level-item">fopen函数</span></span></a></li><li><a class="level is-mobile" href="#fread函数"><span class="level-left"><span class="level-item">1.5.2</span><span class="level-item">fread函数</span></span></a></li><li><a class="level is-mobile" href="#fwrite函数"><span class="level-left"><span class="level-item">1.5.3</span><span class="level-item">fwrite函数</span></span></a></li><li><a class="level is-mobile" href="#fclose函数"><span class="level-left"><span class="level-item">1.5.4</span><span class="level-item">fclose函数</span></span></a></li><li><a class="level is-mobile" href="#fflush函数"><span class="level-left"><span class="level-item">1.5.5</span><span class="level-item">fflush函数</span></span></a></li><li><a class="level is-mobile" href="#fseek函数"><span class="level-left"><span class="level-item">1.5.6</span><span class="level-item">fseek函数</span></span></a></li><li><a class="level is-mobile" href="#fgetc，getc，getchar函数"><span class="level-left"><span class="level-item">1.5.7</span><span class="level-item">fgetc，getc，getchar函数</span></span></a></li><li><a class="level is-mobile" href="#fputc，putc，putchar函数"><span class="level-left"><span class="level-item">1.5.8</span><span class="level-item">fputc，putc，putchar函数</span></span></a></li><li><a class="level is-mobile" href="#fgets，gets函数"><span class="level-left"><span class="level-item">1.5.9</span><span class="level-item">fgets，gets函数</span></span></a></li><li><a class="level is-mobile" href="#格式化输入输出"><span class="level-left"><span class="level-item">1.5.10</span><span class="level-item">格式化输入输出</span></span></a></li><li><a class="level is-mobile" href="#其他流函数"><span class="level-left"><span class="level-item">1.5.11</span><span class="level-item">其他流函数</span></span></a></li><li><a class="level is-mobile" href="#文件流错误"><span class="level-left"><span class="level-item">1.5.12</span><span class="level-item">文件流错误</span></span></a></li><li><a class="level is-mobile" href="#文件流和文件描述符"><span class="level-left"><span class="level-item">1.5.13</span><span class="level-item">文件流和文件描述符</span></span></a></li></ul></li><li><a class="level is-mobile" href="#文件和目录的维护"><span class="level-left"><span class="level-item">1.6</span><span class="level-item">文件和目录的维护</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#chmod系统调用"><span class="level-left"><span class="level-item">1.6.1</span><span class="level-item">chmod系统调用</span></span></a></li><li><a class="level is-mobile" href="#chown系统调用"><span class="level-left"><span class="level-item">1.6.2</span><span class="level-item">chown系统调用</span></span></a></li><li><a class="level is-mobile" href="#unlink，link，syslink系统调用"><span class="level-left"><span class="level-item">1.6.3</span><span class="level-item">unlink，link，syslink系统调用</span></span></a></li><li><a class="level is-mobile" href="#mkdir和rmdir系统调用"><span class="level-left"><span class="level-item">1.6.4</span><span class="level-item">mkdir和rmdir系统调用</span></span></a></li><li><a class="level is-mobile" href="#chdir系统调用和getcwd函数"><span class="level-left"><span class="level-item">1.6.5</span><span class="level-item">chdir系统调用和getcwd函数</span></span></a></li></ul></li><li><a class="level is-mobile" href="#扫描目录"><span class="level-left"><span class="level-item">1.7</span><span class="level-item">扫描目录</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#opendir函数"><span class="level-left"><span class="level-item">1.7.1</span><span class="level-item">opendir函数</span></span></a></li><li><a class="level is-mobile" href="#readdir函数"><span class="level-left"><span class="level-item">1.7.2</span><span class="level-item">readdir函数</span></span></a></li><li><a class="level is-mobile" href="#telldir，seekdir函数"><span class="level-left"><span class="level-item">1.7.3</span><span class="level-item">telldir，seekdir函数</span></span></a></li><li><a class="level is-mobile" href="#closedir函数"><span class="level-left"><span class="level-item">1.7.4</span><span class="level-item">closedir函数</span></span></a></li></ul></li><li><a class="level is-mobile" href="#错误处理"><span class="level-left"><span class="level-item">1.8</span><span class="level-item">错误处理</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#strerror函数"><span class="level-left"><span class="level-item">1.8.1</span><span class="level-item">strerror函数</span></span></a></li><li><a class="level is-mobile" href="#perror函数"><span class="level-left"><span class="level-item">1.8.2</span><span class="level-item">perror函数</span></span></a></li></ul></li><li><a class="level is-mobile" href="#proc文件系统"><span class="level-left"><span class="level-item">1.9</span><span class="level-item">/proc文件系统</span></span></a></li></ul></li></ul></div></div><style>#toc .menu-list > li > a.is-active + .menu-list { display: block; }#toc .menu-list > li > a + .menu-list { display: none; }</style><script src="/js/toc.js" defer></script></div><div class="card widget" data-type="categories"><div class="card-content"><div class="menu"><h3 class="menu-label">Categories</h3><ul class="menu-list"><li><a class="level is-mobile" href="/categories/linux/"><span class="level-start"><span class="level-item">linux</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile" href="/categories/linux-command-line/"><span class="level-start"><span class="level-item">linux command line</span></span><span class="level-end"><span class="level-item tag">3</span></span></a></li><li><a class="level is-mobile" href="/categories/programming-language/"><span class="level-start"><span class="level-item">programming language</span></span><span class="level-end"><span class="level-item tag">4</span></span></a></li></ul></div></div></div></div><!--!--></div></div></section><footer class="footer"><div class="container"><div class="level"><div class="level-start"><a class="footer-logo is-block mb-2" href="/"><img src="/img/logo.svg" alt="Yiming&#039;s Blog" height="28"></a><p class="is-size-7"><span>&copy; 2021 Yiming He</span>  Powered by <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a> &amp; <a href="https://github.com/ppoffice/hexo-theme-icarus" target="_blank" rel="noopener">Icarus</a><br><span id="busuanzi_container_site_uv">Visited by <span id="busuanzi_value_site_uv">0</span> users</span></p></div><div class="level-end"><div class="field has-addons"><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Creative Commons" href="https://creativecommons.org/"><i class="fab fa-creative-commons"></i></a></p><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Attribution 4.0 International" href="https://creativecommons.org/licenses/by/4.0/"><i class="fab fa-creative-commons-by"></i></a></p><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Download on GitHub" href="https://github.com/ppoffice/hexo-theme-icarus"><i class="fab fa-github"></i></a></p></div></div></div></div></footer><script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/moment@2.22.2/min/moment-with-locales.min.js"></script><script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.4/dist/clipboard.min.js" async></script><script>moment.locale("en");</script><script>var IcarusThemeSettings = {
+            article: {
+                highlight: {
+                    clipboard: true,
+                    fold: 'unfolded'
+                }
+            }
+        };</script><script src="/js/column.js"></script><script src="/js/animation.js"></script><a id="back-to-top" title="Back to top" href="javascript:;"><i class="fas fa-chevron-up"></i></a><script src="/js/back_to_top.js" defer></script><!--!--><!--!--><!--!--><!--!--><script src="https://cdn.jsdelivr.net/npm/cookieconsent@3.1.1/build/cookieconsent.min.js" defer></script><script>window.addEventListener("load", () => {
+      window.cookieconsent.initialise({
+        type: "info",
+        theme: "edgeless",
+        static: false,
+        position: "bottom-left",
+        content: {
+          message: "This website uses cookies to improve your experience.",
+          dismiss: "Got it!",
+          allow: "Allow cookies",
+          deny: "Decline",
+          link: "Learn more",
+          policy: "Cookie Policy",
+          href: "https://www.cookiesandyou.com/",
+        },
+        palette: {
+          popup: {
+            background: "#edeff5",
+            text: "#838391"
+          },
+          button: {
+            background: "#4b81e8"
+          },
+        },
+      });
+    });</script><script src="https://cdn.jsdelivr.net/npm/lightgallery@1.6.8/dist/js/lightgallery.min.js" defer></script><script src="https://cdn.jsdelivr.net/npm/justifiedGallery@3.7.0/dist/js/jquery.justifiedGallery.min.js" defer></script><script>window.addEventListener("load", () => {
+            if (typeof $.fn.lightGallery === 'function') {
+                $('.article').lightGallery({ selector: '.gallery-item' });
+            }
+            if (typeof $.fn.justifiedGallery === 'function') {
+                if ($('.justified-gallery > p > .gallery-item').length) {
+                    $('.justified-gallery > p > .gallery-item').unwrap();
+                }
+                $('.justified-gallery').justifiedGallery();
+            }
+        });</script><!--!--><!--!--><script type="text/x-mathjax-config">MathJax.Hub.Config({
+            'HTML-CSS': {
+                matchFontHeight: false
+            },
+            SVG: {
+                matchFontHeight: false
+            },
+            CommonHTML: {
+                matchFontHeight: false
+            },
+            tex2jax: {
+                inlineMath: [
+                    ['$','$'],
+                    ['\\(','\\)']
+                ]
+            }
+        });</script><script src="https://cdn.jsdelivr.net/npm/mathjax@2.7.5/unpacked/MathJax.js?config=TeX-MML-AM_CHTML" defer></script><!--!--><!--!--><!--!--><script src="/js/main.js" defer></script><div class="searchbox"><div class="searchbox-container"><div class="searchbox-header"><div class="searchbox-input-container"><input class="searchbox-input" type="text" placeholder="Type something..."></div><a class="searchbox-close" href="javascript:;">×</a></div><div class="searchbox-body"></div></div></div><script src="/js/insight.js" defer></script><script>document.addEventListener('DOMContentLoaded', function () {
+            loadInsight({"contentUrl":"/content.json"}, {"hint":"Type something...","untitled":"(Untitled)","posts":"Posts","pages":"Pages","categories":"Categories","tags":"Tags"});
+        });</script></body></html>
